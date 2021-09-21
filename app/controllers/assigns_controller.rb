@@ -40,6 +40,7 @@ class AssignsController < ApplicationController
         I18n.t('views.messages.cannot_delete_member_4_some_reason')
       end
     end
+  end
 
   def email_exist?
     team = find_team(params[:team_id])
