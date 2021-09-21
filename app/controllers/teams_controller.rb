@@ -1,6 +1,7 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_team, only: %i[show edit update destroy owner_change]
+  before_action :cannot_edit_unowner, only: %i[edit update]
 
   def index
     @teams = Team.all
@@ -63,5 +64,11 @@ class TeamsController < ApplicationController
 
   def team_params
     params.fetch(:team, {}).permit %i[name icon icon_cache owner_id keep_team_id]
+  end
+
+  def cannot_edit_unowner
+    unless current_user == @team.owner
+      redirect_to @team, notice: I18n.t('views.messages.no_authority')
+    end
   end
 end
